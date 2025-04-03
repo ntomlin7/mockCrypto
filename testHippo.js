@@ -1,5 +1,11 @@
 import { objHippoChain } from "./index.js";
 import {fs} from "./index.js"
+import express from 'express'
+import cors from 'cors'
+var app = express();
+app.use(cors())
+app.use(express.json())
+const HTTP_PORT = 8000
 
 objHippoChain.checkChainExists(() => {
     objHippoChain.printChain()

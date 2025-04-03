@@ -1,15 +1,7 @@
 import sha256 from "sha256";
-
-// const express = require('express')
-// const cors = require('cors')
 // Import file system, which will allow us to write the contents of the chain to an external json file
 import * as fs from 'node:fs';
 import { constants } from "node:buffer";
-import { json } from "node:stream/consumers";
-// var app = express();
-// app.use(cors())
-// app.use(express.json())
-
 const jsonDataFile = "./chainData.json"
 
 const objHippoChain = {
@@ -26,6 +18,7 @@ const objHippoChain = {
         },
     ],
 
+    //Check if the chain exists. If it does, then import data from chainData.json and set chain = to that
     checkChainExists: (callback) => {
         fs.access(jsonDataFile, constants.F_OK, (err) => {
             if(err) {
@@ -55,7 +48,6 @@ const objHippoChain = {
         })
     },
 
-    //If chain is not empty, then import data from chainData.json and set chain = to that
     getLastBlock: () => {
         return objHippoChain.chain[objHippoChain.chain.length -1]
     },
@@ -84,7 +76,6 @@ const objHippoChain = {
         }
         objHippoChain.chain.push(newBlock)
 
-        //Store blocks onto an chain and then store than in external JSON file?
 
     },
     printChain: () => {
