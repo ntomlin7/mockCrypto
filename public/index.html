@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HippoCoin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/pulse/bootstrap.min.css" integrity="sha384-L7+YG8QLqGvxQGffJ6utDKFwmGwtLcCjtwvonVZR/Ba2VzhpMwBz51GaXnUsuYbj" crossorigin="anonymous">
+
+</head>
+<body class="bg-dark">
+    <div class="d-flex justify-content-center align-items-center flex-column min-vh-100">
+        <div class="card col-12 col-md-8 col-lg-6 align-items-center rounded">
+            <div class="card-body col-12" id="divGenerateBlock">
+                <img src="hc.png" class="d-block img-fluid mx-auto" alt="Hippo Coin Logo" style="max-width: 180px;">
+                <label for="txtTransactionAmount" class="mb-0">Transaction Amount:</label>
+                <input id="txtTransactionAmount" class="form-control mb-3 rounded" type="number" placeholder="Transaction Amount" aria-label="Enter the amount for the Transaction">
+                <label for="txtSender" class="mb-0">Sender:</label>
+                <input id="txtSender" class="form-control mb-2 rounded" type="text" placeholder="Sender" aria-label="Please enter the sender">
+                <label for="txtRecipient" class="mb-0 mt-2">Recipient:</label>
+                <input id="txtRecipient" class="form-control mb-4 rounded" type="text" placeholder="Recipient" aria-label="Please enter the recipient">
+                <hr/>
+                <button class="btn btn-primary col-12 mt-1 rounded" type="button" id="btnNewBlock">Mine New Block</button>
+                <button class="btn btn-dark col-12 mt-1 mb-4 rounded" type="button" id="btnViewChain">View Chain</button>
+                <label for="lastBlock" id="labelLastBlock" class="mb-0 mt-1" style="display: none;">Generated Block:</label>
+                <pre id="lastBlock" class="text-light bg-primary p-3 rounded" style="display: none;"></pre>
+                <label for="viewChain" id="labelViewChain" class="mb-0 mt-1" style="display: none;">Current Chain:</label>
+                <pre id="viewChain" class="text-light bg-dark p-3 rounded" style="display: none;"></pre>
+            </div>
+        </div>
+    </div>
+    
+    <script src="testHippo.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

@@ -1,8 +1,16 @@
 import sha256 from "sha256";
-// Import file system, which will allow us to write the contents of the chain to an external json file
 import * as fs from 'node:fs';
 import { constants } from "node:buffer";
+import express from 'express'
+import cors from 'cors'
+
+var app = express();
+app.use(cors())
+app.use(express.json())
+app.use(express.static('public'));
+
 const jsonDataFile = "./chainData.json"
+const HTTP_PORT = 8000
 
 const objHippoChain = {
 
@@ -38,7 +46,7 @@ const objHippoChain = {
                             console.log("Chain loaded successfully")
                         }
                         catch (err) {
-                            console.log("Something went wrong when parsing the external chain data in the json file", err.message)
+                            console.log("Something went wrong when parsing the external chain data in the json file:", err.message)
                         } finally {
                             callback();
                         }
@@ -74,7 +82,16 @@ const objHippoChain = {
             hash: newCoinHash.strLocalHash,
             previousHash: prevBlock.hash
         }
-        objHippoChain.chain.push(newBlock)
+
+        //Method for checking if hash already exists on chain. Basically just filter the existing chain and if the length is 0 then it 
+        //doesn't exist on the chain
+        const filteredChain = objHippoChain.chain.filter(block => block.hash == newCoinHash.strLocalHash)
+        if(filteredChain.length == 0 ) {
+            console.log("Hash does not exist on chain. Generating new block...")
+            objHippoChain.chain.push(newBlock)
+        } else {
+            console.log("Hash already exists on chain. Discarding block...")
+        }
 
 
     },
@@ -84,5 +101,39 @@ const objHippoChain = {
 
 }
 
-export {objHippoChain};
-export {fs};
+app.listen(HTTP_PORT, () => {
+    console.log('App listening on port', HTTP_PORT)
+})
+
+//Post for the frontend to generate a new block
+app.post('/generateBlock', (req, res) => {
+
+    const decTransAmt = req.body.amount
+    const strTransSender = req.body.sender
+    const strTransRecipient = req.body.recipient
+
+    objHippoChain.checkChainExists(() => {
+      
+      objHippoChain.createNewBlock(decTransAmt, strTransSender, strTransRecipient);
+      console.log("Block Generated Successfully!")
+      const content = JSON.stringify(objHippoChain.chain);
+  
+      fs.writeFile('./chainData.json', content, err => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: "Failed to write file" });
+        }
+  
+        res.status(200).json({ message: "Data saved successfully!", block: objHippoChain.getLastBlock()});
+        //objHippoChain.printChain();
+      });
+    });
+  });
+
+  //get for frontend to view the chain data
+  app.get('/viewChain',(req, res) => {
+    objHippoChain.checkChainExists(() => {
+        res.status(200).json({chain: objHippoChain.chain});
+        console.log("Chain data sent to front end!")
+    })
+})
